@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 
 
 def iniciar_driver():
@@ -41,5 +42,14 @@ def iniciar_driver():
 
 
 driver = iniciar_driver()
-driver.get('https://pt.wikipedia.org/wiki/Brasil')
-input('aperta uma tecla para fechar')
+driver.get('https://cursoautomacao.netlify.app/')
+
+campo_nome = driver.find_element(By.NAME,'seu-nome')
+radio_bottons = driver.find_elements(By.NAME,'exampleRadios')
+
+if campo_nome is not None:
+    print('Campo nome encontrado')
+if radio_bottons is not None:
+    print('Radio buttons encontrados')
+
+input('')
