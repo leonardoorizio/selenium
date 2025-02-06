@@ -43,23 +43,21 @@ def iniciar_driver():
 
 
 driver = iniciar_driver()
-driver.get('https://cursoautomacao.netlify.app/')
+driver.get('https://cursoautomacao.netlify.app/desafios')
 sleep(2)
 driver.maximize_window()
 
-pais_dropdown = driver.find_element(By.XPATH,'//select[@id="paisselect"]')
+pais_dropdown = driver.find_element(By.ID,'paisesselect')
 opcoes = Select(pais_dropdown)
 
-#Indice
-opcoes.select_by_index(0)
+opcoes.select_by_index(2)
 sleep(2)
 
-#Value
-opcoes.select_by_value('estadosunidos')
+opcoes.select_by_index(4)
 sleep(2)
 
-#texto de exibição
-opcoes.select_by_visible_text('Canada')
+opcoes.select_by_index(6)
 sleep(2)
 
 input('')
+driver.close
