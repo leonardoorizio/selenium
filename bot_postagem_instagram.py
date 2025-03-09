@@ -1,4 +1,7 @@
 from selenium import webdriver
+from selenium.common.exceptions import *
+from selenium.webdriver.support import expected_conditions as CondicaoExperada
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
@@ -37,35 +40,57 @@ def iniciar_driver():
     })
     # inicializando o webdriver
     driver = webdriver.Chrome(options=chrome_options)
-    return driver
+
+    wait = WebDriverWait (
+        driver,
+        10,
+        poll_frequency=1,
+        ignored_exceptions=[
+            NoSuchElementException,
+            ElementNotVisibleException,
+            ElementNotSelectableException,]
+
+    )
+
+    return driver, wait  
     # Navegar até um site
 
 
-driver = iniciar_driver()
-driver.get('https://x.com/?logout=1739121171474&mx=2')
+driver, wait = iniciar_driver()
+driver.get('https://www.instagram.com/#')
 driver.maximize_window()
 sleep(10)
 
-botao_entrar = driver.find_element(By.XPATH, '//*[text()="Entrar"]') #ajustar o xpath
+email = wait.until(CondicaoExperada.element_to_be_clickable((By.XPATH, '//input[contains(@name, "username")]')))
+#email.click()
+email.send_keys('lgo.dev.floripa@gmail.com')
+sleep(10)
+
+senha = wait.until(CondicaoExperada.element_to_be_clickable((By.XPATH, '//input[contains(@name, "password")]')))
+#senha.click()
+senha.send_keys()
+sleep(10)
+
+botao_entrar = wait.until(CondicaoExperada.element_to_be_clickable((By.XPATH, '//button[contains(@class, " _acan _acap _acas _aj1- _ap30")]')))
 botao_entrar.click()
 sleep(10)
 
-campo_email = driver.find_element(By.XPATH,'//input[contains(@class, "r-30o5oe r-1dz5y72 r-13qz1uu r-1niwhzg r-17gur6a r-1yadl64 r-deolkf r-homxoj r-poiln3 r-7cikom r-1ny4l3l r-t60dpp r-fdjqy7")]')
-campo_email.click()
-campo_email.send_keys('lgo.dev.floripa@gmail.com')
-sleep(10)
-
-botao_avancar = driver.find_element(By.XPATH, '//button[contains(@class, "css-175oi2r r-sdzlij r-1phboty r-rs99b7 r-lrvibr r-ywje51 r-184id4b r-13qz1uu r-2yi16 r-1qi8awa r-3pj75a r-1loqt21 r-o7ynqc r-6416eg r-1ny4l3l")]//div[contains(@class, "css-146c3p1 r-bcqeeo r-qvutc0 r-37j5jr r-q4m81j r-a023e6 r-rjixqe r-b88u0q r-1awozwy r-6koalj r-18u37iz r-16y2uox r-1777fci")]//span[contains(text(),"Avançar")]')
-botao_avancar.click()
-sleep(10)
-
-campo_senha = driver.find_element(By.XPATH, '//input[contains(@class, "r-30o5oe r-1dz5y72 r-13qz1uu r-1niwhzg r-17gur6a r-1yadl64 r-deolkf r-homxoj r-poiln3 r-7cikom r-1ny4l3l r-t60dpp r-fdjqy7")]') #'//*[text()="Senha"]')
-campo_senha.click()
-campo_senha.send_keys()
-sleep(10)
-
-botao_entrar = driver.find_element(By.XPATH, '//button[contains(@class, "css-175oi2r r-sdzlij r-1phboty r-rs99b7 r-lrvibr r-19yznuf r-64el8z r-1fkl15p r-o7ynqc r-6416eg r-icoktb r-1ny4l3l")]//span[contains(text(), "Entrar")]')
-botao_entrar.click()
-sleep(10)
+while True:
+    driver.get('https://www.instagram.com/satoshinakamoto._/')
+    sleep(5)
+    postagens = wait.until(CondicaoExperada.visibility_of_all_elements_located((By.XPATH, '//div[contains(@class, "_aagu")]')))
+    sleep(5)
+    postagens[0].click()
+    sleep(5)
+    elementos_postagem = wait.until(CondicaoExperada.visibility_of_any_elements_located((By.XPATH, '//div[@class="x1lliihq x1n2onr6 xyb1xck"]')))
+    sleep(5)
+    if len(elementos_postagem) == 20:
+        elementos_postagem[0].click()
+        sleep(86400)
+    else:
+        print('postagem já foi curtida')
+        sleep(86400)
 
 input('')
+
+# >> Terminar de revisar o código para ficar igual do vídeo
